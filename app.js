@@ -81,7 +81,7 @@ const game = {
                 y = this.boardWidth - this.ballDiameter;
                 this.directionY = -this.directionY;
                 this.playerL.score++
-                goal = true;
+                goal = 'goalL';
             }
         }
         // check bounce from left paddle
@@ -99,7 +99,7 @@ const game = {
             if (y <= 0) {
                 this.directionY = -this.directionY;
                 this.playerR.score++
-                goal = true;
+                goal = 'goalR';
             }
         }
 

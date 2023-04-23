@@ -31,7 +31,7 @@ socketIo.on('connection', (socket) => {
     usersCounter++;
     socket.emit('connected', usersCounter);
 
-    socket.on('move', function (changes) {        
+    socket.on('move', function (changes) {
         game.movePaddle(changes.player, changes.direction);
         socketIo.sockets.emit('move', {
             player: changes.player,
@@ -65,6 +65,12 @@ socketIo.on('connection', (socket) => {
     });
     socket.on('reset', function (changes) {
         game.reset();
+        pauseGame();
+        socketIo.sockets.emit('game', {
+            ballX: game.ballX,
+            ballY: game.ballY,
+        });
+        socketIo.sockets.emit('score', { goal: '', playerL: game.playerL, playerR: game.playerR });
     });
 
     // emit current game status
@@ -75,7 +81,7 @@ socketIo.on('connection', (socket) => {
     socket.on('disconnect', function () {
         //preventing memory leak
         usersCounter--;
-        if (usersCounter < 2) {            
+        if (usersCounter < 2) {
             pauseGame();
         }
         console.log('A user disconnected');
@@ -91,10 +97,10 @@ startGame = function () {
         socketIo.sockets.emit('game', {
             ballX: game.ballX,
             ballY: game.ballY,
-        });       
-        if (goal) socketIo.sockets.emit('score', { playerL: game.playerL, playerR: game.playerR })
-    }, 20);
-    
+        });
+        if (goal) socketIo.sockets.emit('score', { goal: goal, playerL: game.playerL, playerR: game.playerR });
+    }, 15);
+
     socketIo.sockets.emit('status', {
         status: game.status
     });
