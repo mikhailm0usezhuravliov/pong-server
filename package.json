@@ -4,6 +4,7 @@
   "description": "",
   "main": "app",
   "scripts": {
+    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon --inspect index",
     "client-install": "npm install --prefix client ",
