@@ -21,9 +21,9 @@ const game = {
     ballY: config.ballStartY,
 
     //start velosity 
-    velosityX: 5,
+    velosityX: 3,
     directionX: 1,
-    velosityY: 10,
+    velosityY: 5,
     directionY: 1,
 
     //paddle
@@ -72,8 +72,8 @@ const game = {
             x <= this.paddleRx + this.paddleHeight) {
 
             this.directionY = -this.directionY;
-            this.velosityX = Math.floor(Math.random() * 5) + 2; // 3-5
-            this.velosityY = Math.floor(Math.random() * 7) + 5; // 5-12
+            this.velosityX = Math.floor(Math.random() * 4) + 2; // 3-5
+            this.velosityY = Math.floor(Math.random() * 5) + 3; // 3-8
 
         } else {
             //check for goal right
@@ -92,8 +92,8 @@ const game = {
             this.directionY = -this.directionY;
 
             //randomize velosity
-            this.velosityX = Math.floor(Math.random() * 5) + 2;
-            this.velosityY = Math.floor(Math.random() * 8) + 6;
+            this.velosityX = Math.floor(Math.random() * 4) + 2;
+            this.velosityY = Math.floor(Math.random() * 5) + 3;
         } else {
             //check for goal left
             if (y <= 0) {

@@ -99,7 +99,7 @@ startGame = function () {
             ballY: game.ballY,
         });
         if (goal) socketIo.sockets.emit('score', { goal: goal, playerL: game.playerL, playerR: game.playerR });
-    }, 15);
+    }, 30);
 
     socketIo.sockets.emit('status', {
         status: game.status
