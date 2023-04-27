@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require('cors');
 const game = require('./app')
+const events = require('./common/events')
 // const 
 const app = express();
 app.use(cors())
@@ -31,7 +32,7 @@ socketIo.on('connection', (socket) => {
     usersCounter++;
     socket.emit('connected', usersCounter);
 
-    socket.on('move', function (changes) {
+    socket.on(events.move, function (changes) {
         game.movePaddle(changes.player, changes.direction);
         socketIo.sockets.emit('move', {
             player: changes.player,
@@ -39,31 +40,23 @@ socketIo.on('connection', (socket) => {
             paddleRx: game.paddleRx
         })
     })
-    socket.on('playerL', function (name) {
-        game.playerL.name = name ? name : '';
-        socketIo.sockets.emit('playerL', { playerL: game.playerL });
+    socket.on(events.setPlayer, function (data) {
+        game[data.player].name = data.name ? data.name : '';
+        socketIo.sockets.emit(events.setPlayer, { [data.player]: game[data.player] });
         game.playerR.name && game.playerL.name ? game.status = 'ready' : game.status = 'not ready'
-        socketIo.sockets.emit('status', {
-            status: game.status
-        });
-    });
-    socket.on('playerR', function (name) {
-        game.playerR.name = name ? name : '';
-        socketIo.sockets.emit('playerR', { playerR: game.playerR });
-        game.playerR.name && game.playerL.name ? game.status = 'ready' : game.status = 'not ready'
-        socketIo.sockets.emit('status', {
+        socketIo.sockets.emit(events.status, {
             status: game.status
         });
     });
 
-    socket.on('start', function (changes) {
+    socket.on(events.start, function (changes) {
         startGame()
     });
 
-    socket.on('pause', function (changes) {
+    socket.on(events.pause, function (changes) {
         pauseGame()
     });
-    socket.on('reset', function (changes) {
+    socket.on(events.reset, function (changes) {
         game.reset();
         pauseGame();
         socketIo.sockets.emit('game', {
@@ -74,11 +67,11 @@ socketIo.on('connection', (socket) => {
     });
 
     // emit current game status
-    socketIo.sockets.emit('status', {
+    socketIo.sockets.emit(events.status, {
         status: game.status
     });
 
-    socket.on('disconnect', function () {
+    socket.on(events.disconnect, function () {
         //preventing memory leak
         usersCounter--;
         if (usersCounter < 2) {
@@ -94,14 +87,14 @@ startGame = function () {
     game.status = 'action';
     gameProcess = setInterval(() => {
         let goal = game.moveBall();
-        socketIo.sockets.emit('game', {
+        socketIo.sockets.emit(events.game, {
             ballX: game.ballX,
             ballY: game.ballY,
         });
-        if (goal) socketIo.sockets.emit('score', { goal: goal, playerL: game.playerL, playerR: game.playerR });
+        if (goal) socketIo.sockets.emit(events.score, { goal: goal, playerL: game.playerL, playerR: game.playerR });
     }, 30);
 
-    socketIo.sockets.emit('status', {
+    socketIo.sockets.emit(events.status, {
         status: game.status
     });
 }
@@ -110,7 +103,7 @@ pauseGame = function () {
     game.status = 'pause';
     clearInterval(gameProcess);
     gameProcess = null;
-    socketIo.sockets.emit('status', {
+    socketIo.sockets.emit(events.status, {
         status: game.status
     });
 }

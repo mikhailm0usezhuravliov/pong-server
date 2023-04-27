@@ -21,10 +21,10 @@ const game = {
     ballY: config.ballStartY,
 
     //start velosity 
-    velosityX: 3,
-    directionX: 1,
-    velosityY: 5,
-    directionY: 1,
+    velosityX: config.startVelosityX,
+    directionX: (Math.random() > .5 ? 1 : -1),
+    velosityY: config.startVelosityY,
+    directionY: (Math.random() > .5 ? 1 : -1),
 
     //paddle
     paddleHeight: config.paddleHeight,
@@ -39,6 +39,8 @@ const game = {
         this.paddleRx = config.paddleRx;
         this.playerL.score = 0;
         this.playerR.score = 0;
+        this.directionX = (Math.random() > .5 ? 1 : -1);
+        this.directionY= (Math.random() > .5 ? 1 : -1);
     },
     movePaddle: function (player, direction) {
         if (direction == 'ArrowUp') {
