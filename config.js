@@ -7,7 +7,9 @@ module.exports = {
     paddleRx: 250,
     paddleHeight: 100,
     ballDiameter: 30,
-    startVelosityX: 3,
-    startVelosityY: 5,
-
+    startVelosityXmin: 3,
+    startVelosityXmax: 5,
+    startVelosityYmim: 5,
+    startVelosityYmin: 9,
+    paddleSpeed: 25
 }

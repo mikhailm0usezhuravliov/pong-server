@@ -1,4 +1,5 @@
 const config = require('./config')
+const randomNumberInRange = require('./common/functions')
 
 const game = {
 
@@ -21,16 +22,16 @@ const game = {
     ballY: config.ballStartY,
 
     //start velosity 
-    velosityX: config.startVelosityX,
+    velosityX: randomNumberInRange(config.startVelosityXmin, config.startVelosityXmax),
     directionX: (Math.random() > .5 ? 1 : -1),
-    velosityY: config.startVelosityY,
+    velosityY: randomNumberInRange(config.startVelosityYmin, config.startVelosityYmax),
     directionY: (Math.random() > .5 ? 1 : -1),
 
     //paddle
     paddleHeight: config.paddleHeight,
     paddleWidth: 28,
-    paddleLx: config.paddleLx,
-    paddleRx: config.paddleRx,
+    paddleL: { x: config.paddleLx, y: 0 },
+    paddleR: { x: config.paddleRx, y: 0 },
 
     reset: function () {
         this.ballX = config.ballStartX;
@@ -40,15 +41,15 @@ const game = {
         this.playerL.score = 0;
         this.playerR.score = 0;
         this.directionX = (Math.random() > .5 ? 1 : -1);
-        this.directionY= (Math.random() > .5 ? 1 : -1);
+        this.directionY = (Math.random() > .5 ? 1 : -1);
     },
     movePaddle: function (player, direction) {
         if (direction == 'ArrowUp') {
-            if (player == 'playerL' && this.paddleLx > 20) this.paddleLx -= 25;
-            if (player == 'playerR' && this.paddleRx > 20) this.paddleRx -= 25;
+            if (player == 'playerL' && this.paddleL.x > 20) this.paddleL.x -= config.paddleSpeed;
+            if (player == 'playerR' && this.paddleR.x > 20) this.paddleR.x -= config.paddleSpeed;
         } else {
-            if (player == 'playerL' && this.paddleLx < 480) this.paddleLx += 25;
-            if (player == 'playerR' && this.paddleRx < 480) this.paddleRx += 25;
+            if (player == 'playerL' && this.paddleL.x < 480) this.paddleL.x += config.paddleSpeed;
+            if (player == 'playerR' && this.paddleR.x < 480) this.paddleR.x += config.paddleSpeed;
         }
     },
 
@@ -74,8 +75,8 @@ const game = {
             x <= this.paddleRx + this.paddleHeight) {
 
             this.directionY = -this.directionY;
-            this.velosityX = Math.floor(Math.random() * 4) + 2; // 3-5
-            this.velosityY = Math.floor(Math.random() * 5) + 3; // 3-8
+            this.velosityX = randomNumberInRange(config.startVelosityXmin, config.startVelosityXmax);
+            this.velosityY = randomNumberInRange(config.startVelosityYmin, config.startVelosityYmax);
 
         } else {
             //check for goal right
@@ -89,13 +90,13 @@ const game = {
         // check bounce from left paddle
         if (this.directionY < 0
             && y <= this.paddleWidth &&
-            x + this.ballDiameter >= this.paddleLx &&
-            x <= this.paddleLx + this.paddleHeight) {
+            x + this.ballDiameter >= this.paddleL.x &&
+            x <= this.paddleL.x + this.paddleHeight) {
             this.directionY = -this.directionY;
 
             //randomize velosity
-            this.velosityX = Math.floor(Math.random() * 4) + 2;
-            this.velosityY = Math.floor(Math.random() * 5) + 3;
+            this.velosityX = randomNumberInRange(config.startVelosityXmin, config.startVelosityXmax);
+            this.velosityY = randomNumberInRange(config.startVelosityYmin, config.startVelosityYmax);
         } else {
             //check for goal left
             if (y <= 0) {
@@ -110,7 +111,7 @@ const game = {
         this.ballX = x;
         this.ballY = y;
         return goal;
-    }
+    },
 }
 
 module.exports = game;

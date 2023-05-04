@@ -36,8 +36,8 @@ socketIo.on('connection', (socket) => {
         game.movePaddle(changes.player, changes.direction);
         socketIo.sockets.emit('move', {
             player: changes.player,
-            paddleLx: game.paddleLx,
-            paddleRx: game.paddleRx
+            paddleL: game.paddleL,
+            paddleR: game.paddleR
         })
     })
     socket.on(events.setPlayer, function (data) {
