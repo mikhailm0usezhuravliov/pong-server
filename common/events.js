@@ -1,5 +1,6 @@
 module.exports = {
     game: 'game',
+    loadConfig: 'loadConfig',
     status: 'status',
     score: 'score',
     move: 'move',
@@ -7,6 +8,6 @@ module.exports = {
     setPlayer: 'setPlayer',
     pause: 'pause',
     reset: 'reset',
-    connected: 'connected',
+    connect: 'connect',
     disconnect: 'disconnect',
 }
